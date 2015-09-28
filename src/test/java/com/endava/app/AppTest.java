@@ -1,4 +1,4 @@
-package com.endava;
+package com.endava.app;
 
 import junit.framework.Test;
 import junit.framework.TestCase;
