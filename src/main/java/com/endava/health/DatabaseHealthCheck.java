@@ -21,7 +21,7 @@ public class DatabaseHealthCheck extends HealthCheck {
 
     @Override
     public Result check() throws Exception {
-        if (jongo.getCollection("test2") != null) {
+        if (jongo.getCollection("students") != null) {
             return Result.healthy(database.getName() + ": Database connected!");
         } else return Result.unhealthy("check db connection");
     }

@@ -9,13 +9,13 @@ import javax.validation.Valid;
 public class ServiceConfiguration extends Configuration {
 
     @Valid
-    private MessagesConfiguration messages;
+    private ConfigFile config;
 
-    public MessagesConfiguration getMessages() {
-        return messages;
+    public ConfigFile getConfig() {
+        return config;
     }
 
-    public void setMessages(MessagesConfiguration messages) {
-        this.messages = messages;
+    public void setConfig(ConfigFile config) {
+        this.config = config;
     }
 }

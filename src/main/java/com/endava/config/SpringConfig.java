@@ -16,7 +16,7 @@ public class SpringConfig {
 
     @Bean
     public DB db() {
-        return new MongoClient("127.0.0.1", 27017).getDB("mydb");
+        return new MongoClient("127.0.0.1", 27017).getDB("university");
     }
 
     @Bean
@@ -26,7 +26,7 @@ public class SpringConfig {
 
     @Bean
     public MongoCollection mongoCollection() {
-        return jongo().getCollection("test2");
+        return jongo().getCollection("students");
     }
 
 }
