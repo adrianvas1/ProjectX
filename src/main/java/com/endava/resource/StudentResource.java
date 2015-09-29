@@ -4,13 +4,18 @@ import com.endava.config.PATCH;
 import com.endava.dto.StudentDTO;
 import com.endava.model.Student;
 import com.endava.service.StudentService;
+import com.sun.jersey.core.header.FormDataContentDisposition;
+import com.sun.jersey.multipart.FormDataParam;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
 
 import javax.validation.Valid;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import java.io.File;
+import java.io.IOException;
 import java.util.List;
 
 /**
@@ -21,6 +26,8 @@ import java.util.List;
 public class StudentResource {
 
 
+    @Autowired
+    Environment environment;
     @Autowired
     public StudentService service;
 
@@ -86,6 +93,35 @@ public class StudentResource {
         String response = "Document with '_id': " + id
                 + ", was deleted succesfully!";
         return Response.ok(response, MediaType.APPLICATION_XML).build();
+    }
+
+    @POST
+    @Consumes(MediaType.MULTIPART_FORM_DATA)
+    @Produces(MediaType.APPLICATION_XML)
+    public Response uploadFile(
+            @FormDataParam("student") String student,
+            @FormDataParam("file") FormDataContentDisposition fileDetail) throws IOException {
+
+        String uploadedFileLocation = environment.getProperty("fileLocation")
+                + fileDetail.getFileName();
+        String fileName = fileDetail.getFileName();
+
+        String output = "File uploaded to: " + uploadedFileLocation;
+        if (service.writeToFile(uploadedFileLocation, student, fileName) == true) {
+            return Response.status(200).entity(output).build();
+        } else return Response.status(400).entity("Bad request: student must contain a name!").build();
+    }
+
+    @GET
+    @Path("/files/{fileName}")
+    @Produces(MediaType.MULTIPART_FORM_DATA)
+    public Response getFile(@PathParam("fileName") String fileName) {
+
+        File file = new File(environment.getProperty("fileLocation") + fileName);
+        Response.ResponseBuilder response = Response.ok(file);
+        response.header("Content-Disposition", "attachment; filename="
+                + fileName);
+        return response.build();
     }
 
 }

@@ -6,10 +6,12 @@ import org.bson.types.ObjectId;
 import org.jongo.Jongo;
 import org.jongo.MongoCollection;
 import org.jongo.MongoCursor;
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Component;
 
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.util.ArrayList;
@@ -51,8 +53,7 @@ public class StudentDAO {
     public String read(String id) {
         if (mongoCollection.findOne(new ObjectId(id)).as(Student.class) != null) {
             return mongoCollection.findOne(new ObjectId(id)).as(Student.class).toString();
-        }
-        else return "Student with id: " + id + " does not exist in the database!";
+        } else return "Student with id: " + id + " does not exist in the database!";
     }
 
     // CREATE - POST
@@ -69,9 +70,34 @@ public class StudentDAO {
         return (mongoCollection.update(new ObjectId(id)).with("{$set: {'name': '" + name + "'}}") != null);
     }
 
-    // DELETE - DELETE
+    // DELETE
     public boolean delete(String id) {
-        return (mongoCollection.remove(new ObjectId(id)) != null );
+        return (mongoCollection.remove(new ObjectId(id)) != null);
+    }
+
+    // UPLOAD FILE
+    public boolean writeToFile(String uploadedFileLocation, String upDocument, String fileName)
+            throws IOException {
+        if (upDocument.matches("(.*)\"name\"(.*)")) {
+
+            JSONObject jsonObj = new JSONObject(upDocument);
+            student.setName((String) jsonObj.get("name"));
+            student.setFileName(fileName);
+            try {
+                student.setAddress((String) jsonObj.get("address"));
+            } catch (Exception e) {
+
+            }
+
+            JSONObject outputStream = new JSONObject(student);
+            FileWriter file = new FileWriter(uploadedFileLocation);
+            file.write(String.valueOf(outputStream));
+            file.flush();
+            file.close();
+            return true;
+        } else {
+            return false;
+        }
     }
 
 }

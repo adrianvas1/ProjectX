@@ -48,4 +48,10 @@ public class StudentService {
         return studentDAO.delete(id);
     }
 
+    // UPLOAD FILE
+    public boolean writeToFile(String uploadedFileLocation, String upDocument, String fileName)
+            throws IOException {
+        return studentDAO.writeToFile(uploadedFileLocation, upDocument, fileName);
+    }
+
 }
