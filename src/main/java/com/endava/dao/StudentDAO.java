@@ -2,14 +2,14 @@ package com.endava.dao;
 
 import com.endava.model.Student;
 import com.mongodb.DB;
+import com.mongodb.MongoException;
 import org.bson.types.ObjectId;
 import org.jongo.Jongo;
 import org.jongo.MongoCollection;
 import org.jongo.MongoCursor;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Repository;
 
 import java.io.FileWriter;
 import java.io.IOException;
@@ -17,7 +17,7 @@ import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
-@Component
+@Repository
 public class StudentDAO {
 
     @Autowired
@@ -61,17 +61,23 @@ public class StudentDAO {
         student.setName(name);
         student.setAddress(address);
         student.setFileName(filename);
-        mongoCollection.save(student);
+        mongoCollection.insert(student);
         return student.get_id();
     }
 
     // UPDATE - PATCH
     public boolean update(String id, String name) {
+        if (id == null) {
+            throw new IllegalArgumentException("Object id must not be null");
+        }
         return (mongoCollection.update(new ObjectId(id)).with("{$set: {'name': '" + name + "'}}") != null);
     }
 
     // DELETE
     public boolean delete(String id) {
+        if (id == null) {
+            throw new IllegalArgumentException("Object id must not be null");
+        }
         return (mongoCollection.remove(new ObjectId(id)) != null);
     }
 

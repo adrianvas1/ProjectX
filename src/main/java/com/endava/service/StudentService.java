@@ -3,7 +3,7 @@ package com.endava.service;
 import com.endava.dao.StudentDAO;
 import com.endava.model.Student;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.util.List;
@@ -11,7 +11,7 @@ import java.util.List;
 /**
  * Created by avas on 9/28/2015.
  */
-@Component
+@Service
 public class StudentService {
 
     @Autowired
