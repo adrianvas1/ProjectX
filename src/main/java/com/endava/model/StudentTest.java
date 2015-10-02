@@ -1,22 +1,36 @@
-package com.endava.dto;
+package com.endava.model;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import org.jongo.marshall.jackson.oid.MongoObjectId;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
-import javax.validation.constraints.NotNull;
+import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
+
 @Component
-public class StudentDTO {
+@Scope("prototype")
+public class StudentTest implements Serializable {
 
     @MongoObjectId
     private String _id;
-    @NotNull
     private String name;
     private String address;
     private String date = new SimpleDateFormat("yyyy:MM:dd_HH:mm:ss").format(Calendar.getInstance().getTime());
     private String fileName;
+
+    @JsonCreator
+    public StudentTest(@JsonProperty("name") String name) {
+        this.name = name;
+    }
+
+    public StudentTest() {
+
+    }
 
     public String get_id() {
         return _id;
@@ -53,7 +67,7 @@ public class StudentDTO {
 
     @Override
     public String toString() {
-        return "Student: name: " + name + "address: " + address + ", date: " + date + ", fileName=" + fileName + "]";
+        return "{\n\"name\": \"" + name + "\", \n\"address\": \"" + address + "\", \n\"date\": \"" + date + "\", \n\"fileName\": \"" + fileName + "\"\n}";
     }
 }
 
