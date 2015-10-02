@@ -8,9 +8,6 @@ import org.springframework.stereotype.Service;
 import java.io.IOException;
 import java.util.List;
 
-/**
- * Created by avas on 9/28/2015.
- */
 @Service
 public class StudentService {
 

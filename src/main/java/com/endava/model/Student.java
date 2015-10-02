@@ -1,19 +1,20 @@
 package com.endava.model;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import org.jongo.marshall.jackson.oid.MongoObjectId;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
+import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
-/**
- * Created by avas on 9/28/2015.
- */
+
 @Component
 @Scope("prototype")
-public class Student {
+public class Student implements Serializable {
 
     @MongoObjectId
     private String _id;
