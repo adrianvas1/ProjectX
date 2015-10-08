@@ -66,11 +66,10 @@ public class StudentResource {
     @GET
     public Response readAll() {
         List<Student> response;
-        if(studentService.readAll() != null) {
+        if (studentService.readAll() != null) {
             response = studentService.readAll();
             return Response.ok(response, MediaType.APPLICATION_JSON).build();
-        }
-        else return Response.status(404).entity("No entries found!").build();
+        } else return Response.status(404).entity("No entries found!").build();
     }
 
 
@@ -132,4 +131,18 @@ public class StudentResource {
         return response.build();
     }
 
+
+    // regex validations
+    @POST
+    @Path("/validate")
+    @Consumes(MediaType.MULTIPART_FORM_DATA)
+    @Produces(MediaType.APPLICATION_XML)
+    public Response form(
+            @FormDataParam("student") String student,
+            @FormDataParam("CNP") String CNP,
+            @FormDataParam("email") String email,
+            @FormDataParam("address") String address) {
+        String response = studentService.validate(student, CNP, email, address);
+        return Response.ok().entity(response).build();
+    }
 }
